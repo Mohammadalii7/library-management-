@@ -77,7 +77,7 @@ class recordController extends Controller
             $book->copies_available -= 1;
             $book->save();
 
-            // SendReminderEmail::dispatch($user, $book);
+
 
             Mail::to($request->user()->email)->send(new BorrowNotification($request->user(), $book));
 

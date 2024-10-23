@@ -22,10 +22,12 @@ class ReminderMail extends Mailable
     public function build()
     {
         return $this->subject('Reminder: Book Return Due Soon')
-                    ->view('emails.reminder') // Create this view for your email content
+                    ->view('emails.reminder') 
                     ->with([
                         'user' => $this->user,
                         'book' => $this->book,
-                    ]);
+                        
+                    ])->from('mdhukka77@gmail.com','Haven Book');
+                    
     }
 }

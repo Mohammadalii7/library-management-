@@ -130,8 +130,14 @@
                 <div class="col-12">
                     <nav class="main-nav">
 
-                        <a href="home" class="logo">
-                            <img src="assets/images/logo.png" alt="">
+                         <a href="dashboard" data-toggle="dropdown" aria-expanded="false" style="text-decoration: none; display: flex; align-items: center;">
+                            <img src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" alt="Profile Icon" class="rounded-circle ml-2" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                            <h5 style="margin: 0;
+        font-family: 'Arial', sans-serif;
+        font-size: 25px;
+        color: white;
+        margin-Top: 10px;
+    ">Welcome {{ Auth::user()->name }}</h5>
                         </a>
 
                         <ul class="nav">
