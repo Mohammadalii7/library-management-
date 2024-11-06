@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use App\Models\BorrowingRecord;
 use Illuminate\Queue\SerializesModels;
 
 class ReminderMail extends Mailable
@@ -21,13 +22,14 @@ class ReminderMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Reminder: Book Return Due Soon')
-                    ->view('emails.reminder') 
-                    ->with([
-                        'user' => $this->user,
-                        'book' => $this->book,
-                        
-                    ])->from('mdhukka77@gmail.com','Haven Book');
+
+    $dueRecords = BorrowingRecord::with('member', 'book')->first();
+    $user = $dueRecords->member;
+    $book = $dueRecords->book;
+    
+         return $this->view('emails.reminder', compact('user', 'book'))
+                ->subject('Book Return Reminder');
+               
                     
     }
 }

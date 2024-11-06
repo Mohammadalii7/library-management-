@@ -10,6 +10,7 @@ use App\Jobs\SendReminderEmail;
 use App\Models\BorrowingRecord;
 use App\Mail\BorrowNotification;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\SendBorrowNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
@@ -79,7 +80,7 @@ class recordController extends Controller
 
 
 
-            Mail::to($request->user()->email)->send(new BorrowNotification($request->user(), $book));
+            SendBorrowNotification::dispatch($request->user(), $book);
 
             DB::commit();
 

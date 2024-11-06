@@ -235,6 +235,7 @@
                 <div class="col-lg-12">
                     <div class="row grid">
                         @foreach($data as $data)
+                        @if($data->status==1)
 
                         <div class="col-lg-6 currently-market-item all msc">
                             <div class="item">
@@ -258,7 +259,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @endif
                         @endforeach
                     </div>
                 </div>

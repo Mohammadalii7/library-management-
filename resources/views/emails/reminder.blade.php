@@ -95,10 +95,9 @@
 
 
 
-            <!-- Image and title section initially hidden -->
-            {{-- <h3>{{ $book->title }}</h3>
-            <img src="{{ url('books/' . $book->image) }}" alt="Cover image of {{ $book->title }}" style="border-radius: 20px; min-width: 195px;"> --}}
-            {{-- Log::info('Image path: ' . url('books/' . $book->image)); --}}
+           <h3>{{ $book->title }}</h3> 
+            <img src="{{ $message->embed(public_path('books/' . $book->image)) }}" alt="Cover image of {{ $book->title }}" style="border-radius: 20px;" width="195">
+  
 
             <p>Thank you!</p>
 

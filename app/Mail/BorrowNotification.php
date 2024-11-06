@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Book;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -30,7 +31,7 @@ class BorrowNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Borrow Notification',
+            subject: 'Book Borrow',
         );
     }
 
@@ -55,7 +56,12 @@ class BorrowNotification extends Mailable
     }
     public function build()
     {
-        return $this->subject('Book Borrowed Confirmation')
-                    ->view('email.borrow_notification')   ->from('mduhukka77@gmail.com', 'Book Haven');
+        $borrow = Book::with('user', 'book')->get();
+        $user = $borrow->user;
+        $book = $borrow->book;
+        
+             return $this->view('email.email.borrow_notification', compact('user', 'book'))
+                    ->subject('Book Borrow Confirmation')   
+                    ->from('mduhukka77@gmail.com', 'Book Haven');
     }
 }

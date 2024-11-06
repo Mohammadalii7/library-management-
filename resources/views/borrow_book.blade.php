@@ -195,6 +195,7 @@
                             <p><strong>Author:</strong> {{ $record->book->author->author_name }}</p>
                             <p><strong>Borrow Date:</strong> {{ $record->borrowed_at }}</p>
                             <p><strong>Category: </strong> {{ $record->book->category->category_name }}</p>
+                        <p><strong>Due Date: </strong> {{($record->due_date)->format('Y-m-d') }}</p>
 
                             <form id="toggleBorrowReturnForm" action="{{ url('return/' . $book->id) }}" method="POST">
                                 @csrf

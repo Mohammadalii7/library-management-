@@ -67,7 +67,7 @@
             border: 1px solid #ddd;
             font-size: 16px;
             transition: all 0.3s;
-            background-color: #f8f9fa;
+            background-color: #     ;
             padding-left: 40px; /* Space for the icon */
         }
 

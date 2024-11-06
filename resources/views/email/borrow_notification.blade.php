@@ -85,23 +85,22 @@
         <h1>Hi {{ $user->name }},</h1>
         <p>Thank you for borrowing the book titled "<strong>{{ $book->title }}</strong>".</p>
 
-        <!-- Book Image -->
-        {{-- <img src="{{ url('book/' . $book ->image) }}" alt="" style="border-radius: 20px; min-width: 195px;"> --}}
-
-
+     
         <div class="book-details">
             <h4>Book Details:</h4>
             <p><strong>Author:</strong> {{ $book->author->author_name }}</p>
             <p><strong>Description:</strong> {{ $book->description }}</p>
             <p><strong>Copies Available:</strong> <strong>{{ $book->copies_available }}</strong></p>
             <p><strong>Date Borrowed:</strong> {{ now()->format('F j, Y') }}</p>
+            <img src="{{ $message->embed(public_path('books/' . $book->image)) }}" alt="Cover image of {{ $book->title }}" style="border-radius: 20px;" width="195">
+
         </div>
 
         <p>We hope you enjoy reading it!</p>
         <p>If you have any questions, feel free to contact us.</p>
 
         <div class="footer">
-            <p>Best regards,<br><strong>Book Haven</strong></p>
+            <p>Best regards,<br><strong>Haven Book Library</strong></p>
         </div>
     </div>
 </body>

@@ -30,7 +30,7 @@ class FineNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Fine Notification',
+            subject: 'Late Book Return Notice',
         );
     }
 
@@ -43,7 +43,8 @@ class FineNotification extends Mailable
 
     public function build()
     {
-        return $this->view('email.fine_notification')
+        return $this->subject('Late Book Return Notice')
+        ->view('email.fine_notification')
         ->with([
             'user' => $this->user,
             'book' => $this->book,

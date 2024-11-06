@@ -7,6 +7,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Mail\FineNotification;
 use App\Models\BorrowingRecord;
+use App\Jobs\SendFineNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -36,8 +37,8 @@ class borrowbookController extends Controller
             $borrowingRecord = BorrowingRecord::where('book_id', $id)
                 ->where('member_id', $request->user()->id)
                 ->whereNull('returned_at')
-                ->first();
-            
+                ->first ();
+
 
             if (!$borrowingRecord) {
                 return redirect()->back()->with('error', 'You have not borrowed this book.');
@@ -69,9 +70,11 @@ class borrowbookController extends Controller
                 $book->copies_available += 1;
                 $book->save();
             }
+            $user = $request->user();
 
             if ($fineAmount > 0) {
-                Mail::to($request->user()->email)->send(new FineNotification($request->user(), $book, $fineAmount, $daysLate));
+                SendFineNotification::dispatch($user, $book, $daysLate, $fineAmount);
+
                 return redirect()->back()->with('message', 'Book Returned Successfully. You have a fine of $' . $fineAmount . ' for being ' . $daysLate . ' days late.');
             } else {
                 return redirect()->back()->with('success', 'Book Returned Successfully.');

@@ -17,20 +17,13 @@ use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\CustomAuthentication;
 use App\Http\Controllers\borrowbookController;
 use App\Http\Controllers\reminderController;
+use App\Http\Middleware\RoleMiddleware;
 
 // Route::view('home','home');
 Route::view('borrow_book', 'borrow_book');
 Route::view('book_detail', 'book_detail');
 Route::view('create', 'create');
 Route::view('author', 'author');
-Route::view('dashboard', 'dashboard');
-Route::view('author/author_detail', 'author/author_detail');
-Route::view('author/addauthor', 'author/addauthor');
-Route::view('category/categorylist', 'category/categorylist');
-Route::view('category/addcategory', 'category/addcategory');
-Route::view('book/addbook', 'book/addbook');
-Route::view('book/showbook', 'book/showbook');
-Route::view('records/record', 'records/record');
 
 Route::middleware([Authentication::class])->group(function () {
     //register
@@ -55,6 +48,8 @@ Route::get('/dashboard', [adminController::class, 'dashboard']);
 
 //categoryadd with foreign key
 //authoradd with foreign key
+Route::middleware([RoleMiddleware::class])->group(function () {
+
 Route::get('book/addbook', [bookController::class, 'bookform']);
 
 //booklist
@@ -70,13 +65,11 @@ Route::post('book/addbook', [bookController::class, 'addbook']);
 Route::get('book/updatebook/{id}', [bookController::class, 'editbook']);
 Route::post('book/updatebook/{id}', [bookController::class, 'updatebook']);
 
-
+Route::post('book/enable/{id}', [BookController::class, 'enable'])->name('book.enable');
+Route::post('book/disable/{id}', [BookController::class, 'disable'])->name('book.disable');
 
 //multiple delete
-
 Route::post('/books/delete-multiple', [bookController::class, 'deleteMultiple'])->name('books.deleteMultiple');
-
-
 
 //categorydetail-----------------------------------------
 //show
@@ -93,16 +86,8 @@ Route::get('category/updatecategory/{id}', [categoryController::class, 'edit']);
 Route::post('category/updatecategory/{id}', [categoryController::class, 'update']);
 
 
-
 //multiple delete
 Route::post('/categories/delete-multiple', [categoryController::class, 'deleteMultiple'])->name('category.deleteMultiple');
-
-// Soft delete a book
-Route::delete('/category/{id}/soft-delete', [categoryController::class, 'softDelete']);
-
-
-
-
 
 //authordetail--------------------------------------------
 //show
@@ -139,7 +124,16 @@ Route::get('record/delete/{id}', [recordController::class, 'delete']);
 //multiple delete
 
 Route::post('/records/delete-multiple', [recordController::class, 'deleteMultiple'])->name('records.deleteMultiple');
+Route::view('author/author_detail', 'author/author_detail');
+Route::view('author/addauthor', 'author/addauthor');
+Route::view('category/categorylist', 'category/categorylist');
+Route::view('category/addcategory', 'category/addcategory');
+Route::view('book/addbook', 'book/addbook');
+Route::view('book/showbook', 'book/showbook');
+Route::view('records/record', 'records/record');
 
+
+});
 
 
 
@@ -169,4 +163,3 @@ Route::get('/logout', [loginController::class, 'logout']);
 
 Route::get('books-data', [bookController::class, 'getBooksData'])->name('books.data');
 
-// Route::get('/send-reminder-emails', [reminderController::class, 'sendReminderEmails']);

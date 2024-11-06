@@ -7,7 +7,9 @@ use App\Models\Book;
 use App\Models\Author;
 use App\Helper\Helpers;
 use App\Helper\TableSSP;
+use App\Models\BorrowingRecord;
 use App\Models\Category;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,34 +19,41 @@ use Illuminate\Support\Facades\Validator;
 class bookController extends Controller
 {
     function showbook(Request $request)
+
     {
+        //  $data = Book::where('status', 1)->get();
         return view('book/showbook');
     }
 
     public function listBook(Request $request)
     {
         if ($request->ajax()) {
-            // Fetch the books with related category and author
+
             $data = Book::with('author', 'category')->select('books.*');
 
-            // Return the DataTable
+
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('category_name', function ($row) {
-                    return $row->category ? $row->category->category_name : 'N/A'; // Assuming 'category_name' is the column in 'categories' table
+                    return $row->category ? $row->category->category_name : 'N/A';
                 })
                 ->addColumn('author_name', function ($row) {
-                    return $row->author ? $row->author->author_name : 'N/A'; // Assuming 'author_name' is the column in 'authors' table
+                    return $row->author ? $row->author->author_name : 'N/A';
                 })
-                ->addColumn('select', function ($row) {
-                    return '<label class="container">
-                                <input type="checkbox" class="select-row item-checkbox" name="selected_books[]" value="' . $row->id . '">
-                                <svg viewBox="0 0 64 64" height="1.2em" width="1.5em">
-                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
-                                </svg>
-                            </label>';
+                ->addColumn('action', function ($row) {
+                    if ($row->status == 1) {
+                        return '<form action="' . url('book/disable', $row->id) . '" method="POST" style="display:inline-block;">
+                                    ' . csrf_field() . '
+                                    <button type="submit" class="btn btn-danger btn-sm">Disable</button>
+                                </form>';
+                    } else {
+                        return '<form action="' . url('book/enable', $row->id) . '" method="POST" style="display:inline-block;">
+                                    ' . csrf_field() . '
+                                    <button type="submit" class="btn btn-success btn-sm">Enable</button>
+                                </form>';
+                    }
                 })
-                ->rawColumns(['select']) // Removed 'action' since it wasn't defined
+                ->rawColumns(['select', 'action'])
                 ->make(true);
         }
     }
@@ -52,8 +61,9 @@ class bookController extends Controller
     {
 
         try {
+            
             DB::beginTransaction();
-            $existingbook = Book::where('title', $request->title)->first();
+            $existingbook = Book::where('title', $request->title)->exists();
 
             if ($existingbook) {
                 DB::rollBack();
@@ -84,6 +94,46 @@ class bookController extends Controller
             dd($e);
             DB::rollBack();
             return redirect()->back()->with('error', 'Failed to add book');
+        }
+    }
+
+    function enable($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $book = Book::find($id);
+
+            $book->status = 1;
+            $book->save();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Book enabled successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', 'Failed to enabled book ');
+        }
+    }
+
+    function disable($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $book = Book::find($id);
+
+            $book->status = 0;
+            $book->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Book disabled successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+
+            return redirect()->back()->with('error', 'Failed to disabled book ');
         }
     }
     function bookform()
@@ -141,7 +191,7 @@ class bookController extends Controller
 
     public function deleteMultiple(Request $request)
     {
-     
+
 
         $bookIds = $request->input('selected_books');
 

@@ -89,6 +89,8 @@
                                         <th>Author</th>
                                         <th>Category</th>
                                         <th>Image</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,87 +111,119 @@
 
 
 <script type="text/javascript">
-
-        var table = $('#book_datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('book.list') }}",
-            columns: [
-                {
-                    data: 'select',
-                    name: 'select',
-                    orderable: false,
-                    searchable: false,
-                    render: function(data, type, full, meta) {
-                        return '<label class="container">' +
-                            '<input type="checkbox" class="item-checkbox" name="selected_books[]" value="' + full.id + '">' +
-                            '<svg viewBox="0 0 64 64" height="1.2em" width="1.5em">' +
-                            '<path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>' +
-                            '</svg>' +
-                            '</label>';
-                    }
-                },
-                {
-                    data: 'id',
-                    name: 'id',
-                    render: function(data, type, full, meta,row) {
-                        return  '  <a href="{{ url('book/updatebook') }}/' + data + '" class="update-link " style="color: black;">'  + (meta.row + 1) + '</a>';
-                    }
-                },
-                {
-                    data: 'title',
-                    name: 'title'
-                },
-                {
-                    data: 'description',
-                    name: 'description'
-                },
-                {
-                    data: 'published_date',
-                    name: 'published_date'
-                },
-                {
-                    data: 'copies_available',
-                    name: 'copies_available'
-                },
-                {
-                    data: 'category_name',
-                    name: 'category_name'
-                },
-                {
-                    data: 'author_name',
-                    name: 'author_name'
-                },
-                {
-                    data: 'image',
-                    name: 'image',
-                    render: function(data, type, full, meta) {
-                        return '<img src="{{ asset('books') }}/' + data + '" alt="Book Image" height="80"/>'; // Fixed image path
-                    }
+var table = $('#book_datatable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('book.list') }}",
+    columns: [
+        {
+            data: 'select',
+            name: 'select',
+            orderable: false,
+            searchable: false,
+            render: function(data, type, full, meta) {
+                return '<label class="container">' +
+                    '<input type="checkbox" class="item-checkbox" name="selected_books[]" value="' + full.id + '">' +
+                    '<svg viewBox="0 0 64 64" height="1.2em" width="1.5em">' +
+                    '<path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>' +
+                    '</svg>' +
+                    '</label>';
+            }
+        },
+        {
+            data: 'id',
+            name: 'id',
+            render: function(data, type, full, meta) {
+                return '<a href="{{ url('book/updatebook') }}/' + data + '" class="update-link" style="color: black;">' + (meta.row + 1) + '</a>';
+            }
+        },
+        {
+            data: 'title',
+            name: 'title'
+        },
+        {
+            data: 'description',
+            name: 'description'
+        },
+        {
+            data: 'published_date',
+            name: 'published_date'
+        },
+        {
+            data: 'copies_available',
+            name: 'copies_available'
+        },
+        {
+            data: 'category_name',
+            name: 'category_name'
+        },
+        {
+            data: 'author_name',
+            name: 'author_name'
+        },
+        {
+            data: 'image',
+            name: 'image',
+            render: function(data, type, full, meta) {
+                return '<img src="{{ asset('books') }}/' + data + '" alt="Book Image" height="80"/>'; 
+            }
+        },
+        {
+            data: 'status',
+            name: 'status',
+            render: function(data, type, full, meta) {
+                return full.status == 1 
+                    ? '<span class="badge badge-success">Enabled</span>' 
+                    : '<span class="badge badge-danger">Disabled</span>';
+            }
+        },{
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            render: function(data, type, full, meta) {
+                if (full.status == 1) {
+                
+                    return '<form action="{{ url('book/disable', '') }}/' + full.id + '" method="POST" style="display:inline-block;">' +
+                        '{{ csrf_field() }}' +
+                        '<button type="submit" class="btn btn-danger btn-sm">Disable</button>' +
+                        '</form>';
+                } else {
+                    return '<form action="{{ url('book/enable', '') }}/' + full.id + '" method="POST" style="display:inline-block;">' +
+                        '{{ csrf_field() }}' +
+                        '<button type="submit" class="btn btn-success btn-sm">Enable</button>' +
+                        '</form>';
                 }
-            ]
-        });
+            }
 
-        const deleteButton = $('#deleteButton');
-        const selectAllCheckbox = $('#selectAll');
-
-        function toggleDeleteButton() {
-            const anyChecked = $('.item-checkbox:checked').length > 0;
-            deleteButton.css('display', anyChecked ? 'inline-block' : 'none');
-
-            const allChecked = $('.item-checkbox').length === $('.item-checkbox:checked').length;
-            selectAllCheckbox.prop('checked', allChecked);
         }
+    ]
+});
 
-        $(document).on('change', '.item-checkbox', function() {
-            toggleDeleteButton();
-        });
 
-        selectAllCheckbox.on('change', function() {
-            const isChecked = $(this).prop('checked');
-            $('.item-checkbox').prop('checked', isChecked);
-            toggleDeleteButton();
-        });
+
+
+    const deleteButton = $('#deleteButton');
+    const selectAllCheckbox = $('#selectAll');
+
+    function toggleDeleteButton() {
+        const anyChecked = $('.item-checkbox:checked').length > 0;
+        deleteButton.css('display', anyChecked ? 'inline-block' : 'none');
+
+        const allChecked = $('.item-checkbox').length === $('.item-checkbox:checked').length;
+        selectAllCheckbox.prop('checked', allChecked);
+    }
+
+    $(document).on('change', '.item-checkbox', function() {
+        toggleDeleteButton();
+    });
+
+    selectAllCheckbox.on('change', function() {
+        const isChecked = $(this).prop('checked');
+        $('.item-checkbox').prop('checked', isChecked);
+        toggleDeleteButton();
+    });
+
 </script>
 
 
