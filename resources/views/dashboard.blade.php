@@ -7,34 +7,42 @@
 
 <style>
 
-        .chart-container {
-            width: 45%;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .stats-container {
-            width: 90%;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .stat-box {
-            text-align: center;
-            font-size: 1.2em;
-        }
-        .stat-box .value {
-            font-size: 1.8em;
-            font-weight: bold;
-        }
-        .stat-box .label {
-            color: #888;
-            font-size: 0.9em;
-        }
+      .stats-container {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.chart-container {
+    width: 45%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px; /* Adds spacing between charts */
+    box-sizing: border-box;
+}
+
+.stat-box {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.stat-box .value {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.stat-box .label {
+    color: #888;
+    font-size: 0.9em;
+}
+
     .block{
         background:#ffffff;
     }
@@ -125,7 +133,7 @@
                 <div class="statistic-block block">
                     <div class="progress-details d-flex align-items-end justify-content-between">
                         <div class="title">
-                            <div class="icon"><i class="icon-user-1"></i></div><strong class="stat-title">Users</strong>
+                            <div class="icon"><i class="fas fa-user"></i></div><strong class="stat-title">Users</strong>
                         </div>
                         <div class="number dashtext-1">{{$user}}</div>
                     </div>
@@ -138,7 +146,7 @@
                 <div class="statistic-block block">
                     <div class="progress-details d-flex align-items-end justify-content-between">
                         <div class="title">
-                            <div class="icon"><i class="icon-contract"></i></div><strong class="stat-title">Books</strong>
+                            <div class="icon"><i class="fas fa-book"></i></div><strong class="stat-title">Books</strong>
                         </div>
                         <div class="number dashtext-2">{{$book}}</div>
                     </div>
@@ -151,7 +159,7 @@
                 <div class="statistic-block block">
                     <div class="progress-details d-flex align-items-end justify-content-between">
                         <div class="title">
-                            <div class="icon"><i class="icon-writing-whiteboard"></i></div><strong class="stat-title">Borrow Books</strong>
+                            <div class="icon"><i class="icon-paper-and-pencil   "></i></div><strong class="stat-title">Borrow Books</strong>
                         </div>
                         <div class="number dashtext-4">{{$borrow}}</div>
                     </div>

@@ -13,6 +13,7 @@ use Illuminate\Queue\SerializesModels;
 class BorrowNotification extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $user;
     public $book;
 
@@ -54,14 +55,14 @@ class BorrowNotification extends Mailable
     {
         return [];
     }
+
     public function build()
     {
-        $borrow = Book::with('user', 'book')->get();
-        $user = $borrow->user;
-        $book = $borrow->book;
-        
-             return $this->view('email.email.borrow_notification', compact('user', 'book'))
-                    ->subject('Book Borrow Confirmation')   
-                    ->from('mduhukka77@gmail.com', 'Book Haven');
+        return $this->view('email.borrow_notification', [
+            'user' => $this->user,
+            'book' => $this->book,
+        ])
+        ->subject('Book Borrow Confirmation')   
+        ->from('mduhukka77@gmail.com', 'Book Haven');
     }
 }

@@ -57,6 +57,7 @@ class recordController extends Controller
 
         $book = Book::find($id);
         $user = Auth::user();
+        // dd($user);
 
 
         $allowedDays = $request->input('allow_days', 30);
@@ -80,7 +81,7 @@ class recordController extends Controller
 
 
 
-            SendBorrowNotification::dispatch($request->user(), $book);
+            SendBorrowNotification::dispatch($user, $book);
 
             DB::commit();
 

@@ -19,11 +19,7 @@ use App\Http\Controllers\borrowbookController;
 use App\Http\Controllers\reminderController;
 use App\Http\Middleware\RoleMiddleware;
 
-// Route::view('home','home');
-Route::view('borrow_book', 'borrow_book');
-Route::view('book_detail', 'book_detail');
-Route::view('create', 'create');
-Route::view('author', 'author');
+
 
 Route::middleware([Authentication::class])->group(function () {
     //register
@@ -128,7 +124,7 @@ Route::view('author/author_detail', 'author/author_detail');
 Route::view('author/addauthor', 'author/addauthor');
 Route::view('category/categorylist', 'category/categorylist');
 Route::view('category/addcategory', 'category/addcategory');
-Route::view('book/addbook', 'book/addbook');
+
 Route::view('book/showbook', 'book/showbook');
 Route::view('records/record', 'records/record');
 
@@ -163,3 +159,6 @@ Route::get('/logout', [loginController::class, 'logout']);
 
 Route::get('books-data', [bookController::class, 'getBooksData'])->name('books.data');
 
+
+
+Route::delete('/category/{id}/soft-delete', [categoryController::class, 'softDelete'])->name('category.softDelete');

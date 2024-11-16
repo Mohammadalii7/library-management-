@@ -112,11 +112,11 @@ class categoryController extends Controller
         }
     }
 
-    // public function softDelete($id)
-    // {
-    //     $book = Category::findOrFail($id);
-    //     $book->delete(); 
-
-    //     return redirect()->back()->with('success','Soft Delete Successfully');
-    // }
+    public function softDelete($id)
+    {
+        $record = Category::find($id);
+        $record->delete();
+    
+        return redirect()->back()->with('success', 'Record soft deleted successfully.');
+    }
 }

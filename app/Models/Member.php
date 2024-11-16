@@ -16,4 +16,8 @@ class Member extends Authenticatable
     {
         return $this->hasMany(BorrowingRecord::class);
     }
+//     public function book()
+// {
+//     return $this->belongsToMany(Book::class);
+// }
 }

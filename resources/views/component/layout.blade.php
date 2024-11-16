@@ -133,7 +133,7 @@
             <!-- Sidebar Navigation Menus-->
             {{-- <span class="heading">Main</span> --}}
             <ul class="list-unstyled">
-                <li class=""><a href="{{ url('dashboard') }}"> <i class="icon-home"></i>Home </a></li>
+                <li class=""><a href="{{ url('dashboard') }}"> <i class="fas fa-home"></i>Home </a></li>
                 <li>
                     <a href="#categorydropdown" aria-expanded="false" data-toggle="collapse">
                         <i class="fas fa-folder"></i>Category
